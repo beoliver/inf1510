@@ -1,5 +1,6 @@
 int mic = A0;
-int led = 8;
+int led = 13;
+int button = 12;
 
 int THRESHOLD = 200; // sound must be > than to be considered on
 
@@ -34,14 +35,12 @@ int alarm_is_on_for = 300000;
 void setup() {
   pinMode(mic,INPUT);
   pinMode(led,OUTPUT);
+  pinMode(button,INPUT_PULLUP);
   Serial.begin(9600);
 }
 
-
-
 void loop() {
-  // alarm_is_on_for--;
-  if (alarm_is_on_for == 0) {
+  if ((alarm_is_on_for == 0) || (digitalRead(button) == LOW)) {
     digitalWrite(led,LOW);
   }
   if (sampleCount < 100) {
@@ -124,7 +123,7 @@ void loop() {
 	if (cycle == REPETITIONS) {
 	  Serial.println("*********** ALARM ***********");
           digitalWrite(led,HIGH);
-          // alarm_is_on_for = 300000;
+          alarm_is_on_for = 300000;
           position = 0;
           cycle = 1;
 	} else {
